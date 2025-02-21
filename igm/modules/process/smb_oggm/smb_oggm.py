@@ -36,13 +36,19 @@ def params(parser):
         default=1.0,
         help="Melt enhancer factor",
     )
+    parser.add_argument(
+        "--smb_mb_calib_file",
+        type=str,
+        default="mb_calib_oggm.json",
+        help="Path to mb calib file for the TI model",
+    )
 
 def initialize(params, state):
     state.tcomp_smb_oggm = []
     state.tlast_mb = tf.Variable(-1.0e5000)
 
     # load the given parameters from the json file
-    with open(os.path.join(params.oggm_RGI_ID, "mb_calib.json"), "r") as json_file:
+    with open(params.smb_mb_calib_file, "r") as json_file:
         jsonString = json_file.read()
 
     oggm_mb_calib = json.loads(jsonString)

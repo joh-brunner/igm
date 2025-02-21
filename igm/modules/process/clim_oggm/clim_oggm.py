@@ -49,12 +49,25 @@ def params(parser):
         default=123,
         help="Seeding parameter to fix for pickying randomly yer in the ref period",
     )
+    parser.add_argument(
+        "--clim_mb_calib_file",
+        type=str,
+        default="mb_calib_oggm.json",
+        help="Path to mb calib file for the TI model",
+    )
+    parser.add_argument(
+        "--clim_forward_climate_file",
+        type=str,
+        default="gcm_data_ACCESS-CM2_.nc",
+        help="Path to climate file for forward runs",
+    )
+    
 
 
 def initialize(params, state):
     # load the given parameters from the json file
     
-    with open(os.path.join(params.oggm_RGI_ID, "mb_calib.json"), "r") as json_file:
+    with open(params.clim_mb_calib_file, "r") as json_file:
         jsonString = json_file.read()
 
     oggm_mb_calib = json.loads(jsonString)
@@ -66,16 +79,13 @@ def initialize(params, state):
     params.prcp_fac = oggm_mb_calib["prcp_fac"]
 
     # load climate data from netcdf file climate_historical.nc
-    nc = Dataset(
-        os.path.join(params.oggm_RGI_ID, "climate_historical.nc")
-    )
+    nc = Dataset(params.clim_forward_climate_file)
 
     time = np.squeeze(nc.variables["time"]).astype("float32")  # unit : year
     prcp = np.squeeze(nc.variables["prcp"]).astype("float32")  # unit : kg * m^(-2)
     temp = np.squeeze(nc.variables["temp"]).astype("float32")  # unit : degree celcius
-    temp_std = np.squeeze(nc.variables["temp_std"]).astype(
-        "float32"
-    )  # unit : degree celcius
+    # temp_std = np.squeeze(nc.variables["temp_std"]).astype("float32")  # unit : degree celcius
+    temp_std = np.zeros_like(temp, dtype="float32")
 
     params.ref_hgt = nc.ref_hgt
     params.yr_0 = nc.yr_0
