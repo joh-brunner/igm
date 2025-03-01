@@ -272,7 +272,7 @@ def optimize(params, state):
     if not params.opti_save_result_in_ncdf=="":
         output_ncdf_optimize_final(params, state)
 
-    plot_cost_functions() 
+    #plot_cost_functions() 
 
     plt.close("all")
 
