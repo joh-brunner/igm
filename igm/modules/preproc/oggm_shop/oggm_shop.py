@@ -480,18 +480,21 @@ def _oggm_util(RGIs, params):
 
         workflow.execute_entity_task(bedtopo.add_consensus_thickness, gdirs)
 
-        from oggm.shop import glathida
+        from oggm.shop import hugonnet_maps
+        workflow.execute_entity_task(hugonnet_maps.hugonnet_to_gdir, gdirs)
 
-        workflow.execute_entity_task(glathida.glathida_to_gdir, gdirs)
 
-        from oggm.shop.w5e5 import process_w5e5_data
+        #from oggm.shop import glathida
+        #workflow.execute_entity_task(glathida.glathida_to_gdir, gdirs)
 
-        workflow.execute_entity_task(process_w5e5_data, gdirs)
+        #from oggm.shop.w5e5 import process_w5e5_data
 
-        workflow.execute_entity_task(tasks.elevation_band_flowline, gdirs)
-        workflow.execute_entity_task(tasks.fixed_dx_elevation_band_flowline, gdirs)
-        workflow.execute_entity_task(tasks.mb_calibration_from_geodetic_mb,
-                                                gdirs, informed_threestep=True)
+        #workflow.execute_entity_task(process_w5e5_data, gdirs)
+
+        #workflow.execute_entity_task(tasks.elevation_band_flowline, gdirs)
+        #workflow.execute_entity_task(tasks.fixed_dx_elevation_band_flowline, gdirs)
+        #workflow.execute_entity_task(tasks.mb_calibration_from_geodetic_mb,
+        #                                       gdirs, informed_threestep=True)
 
     source_folder = gdirs[0].get_filepath("gridded_data").split("gridded_data.nc")[0]
     destination_folder = params.oggm_RGI_ID
