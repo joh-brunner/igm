@@ -234,6 +234,14 @@ def initialize(params, state):
         dhdt = np.where(icemaskobs, dhdt, 0)
         vars_to_save += ["dhdt"]
 
+    # COOK
+    cook = True
+    if cook:
+        cook23_thk = np.flipud(np.squeeze(nc.variables["cook23_thk"]).astype("float32"))
+        cook23_thk = np.where(np.isnan(cook23_thk), 0, cook23_thk)
+        cook23_thk = np.where(icemaskobs, cook23_thk, 0)
+        vars_to_save += ["cook23_thk"]
+
     thkobs = np.zeros_like(thk) * np.nan
 
     if params.oggm_incl_glathida:
@@ -291,6 +299,7 @@ def initialize(params, state):
         var_info["vvelsurfobs"] = ["y surface velocity of ice", "m/y"]
         var_info["icemask"] = ["Ice mask", "no unit"]
         var_info["dhdt"] = ["Ice thickness change", "m/y"]
+        var_info["cook23_thk"] = ["Cook thickness", "m"]
         if params.oggm_sub_entity_mask == True:
             var_info["tidewatermask"] = ["Tidewater glacier mask", "no unit"]
             var_info["slopes"] = ["Average glacier surface slope", "deg"]
@@ -482,6 +491,10 @@ def _oggm_util(RGIs, params):
 
         from oggm.shop import hugonnet_maps
         workflow.execute_entity_task(hugonnet_maps.hugonnet_to_gdir, gdirs)
+
+        from oggm.shop import cook23
+        workflow.execute_entity_task(cook23.cook23_to_gdir, gdirs)
+
 
 
         #from oggm.shop import glathida
