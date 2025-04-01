@@ -8,6 +8,8 @@
 
 # Overview
 
+Cook Thickness requires external OGGM Shop Update
+
 Fork Johannes Brunner
 
 The Instructed Glacier Model (IGM) is an **open-source Python package**, which permits to simulate **3D glacier evolution** accounting for the coupling between ice thermo-dynamics, surface mass balance, and mass conservation. IGM features:
